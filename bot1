@@ -1,0 +1,64 @@
+from binance.client import Client
+from binance.enums import *
+import time
+
+api_key = ''
+api_secret = ''
+
+tradePair = 'BTCBUSD'
+client = Client(api_key, api_secret)
+
+# Initial values
+lastrade = 'BTC'
+lasprice = 45351.94
+winRate = 1.035
+
+while True:
+    # Price & Server Time
+    price = client.get_ticker(symbol='BTCBUSD')
+    coitime = client.get_server_time()
+    coitime = time.strftime('%m/%d/%Y %H:%M:%S',
+                            time.gmtime(coitime['serverTime']/1000.))
+
+    # SELL BTC (since last trade is BTC)
+    if lastrade == 'BTC':
+        balance = client.get_asset_balance(asset='BTC')
+        coiNumber = format(float(balance['free']),'.4f')
+        coiprice = format(float(price['askPrice']), '.2f')
+        if float(coiprice) > lasprice * winRate:
+            stat = 'sell'
+            
+            order = client.order_limit_sell(
+                symbol='BTCBUSD',
+                quantity= float(coiNumber),
+                price= coiprice)
+            
+            lastrade = 'BUSD'
+            lasprice = coiprice
+            time.sleep(30)     # Wait 0.5 minutes to do the trade
+        else:
+            stat = 'hold BTC'
+
+    # BUY BTC (since last trade is BUSD)    
+    elif lastrade == 'BUSD':
+        balance = client.get_asset_balance(asset='BUSD')
+        coiNumber = format(float(balance['free']),'.4f')
+        coiprice = format(float(price['askPrice']), '.2f')
+        test = float(coiNumber)/float(coiprice)
+        if float(coiprice) * winRate < lasprice:
+            stat = 'buy'
+            
+            order = client.order_limit_buy(
+                symbol='BTCBUSD',
+                quantity=format(test, '.4f'),
+                price= coiprice)
+            
+            lastrade = 'BTC'
+            lasprice = coiprice
+            time.sleep(30)     # Wait 0.5 minutes to do the trade    
+        else:
+            stat = 'hold BUSD'
+
+    # Print the values
+    print(coitime + ' ' + balance['free'] + ' ' + price['askPrice'] + ' ' + stat)
+    time.sleep(60)              # Repeat the code every minute
