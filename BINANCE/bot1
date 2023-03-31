@@ -1,3 +1,6 @@
+# A very simple bot that buys and sells based on reference price changes.
+# The reference is set by 'winRate'
+
 from binance.client import Client
 from binance.enums import *
 import time
