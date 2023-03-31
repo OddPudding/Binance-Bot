@@ -1,9 +1,6 @@
-##################################################
 ## Binance Python Bot :]
-## Edits:
-## - Stoploss
-## - MACD
-##################################################
+# This bot calculates RSI and MACD to create buy/sell orders
+# This bot also has a stoploss function to act in critical price drops
 
 import time
 import datetime as DT
@@ -15,7 +12,6 @@ import pandas as pd
 # pip install numpy
 import numpy as np
 
-##################################################
 
 # pip install python-telegram-bot
 ##import logging
