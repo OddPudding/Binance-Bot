@@ -1,6 +1,6 @@
-##################################################
 ## Binance Python Bot :]
-##################################################
+# This bot calculates the RSI indicator and buys/sells if 
+# RSI is in range and the price is higher than buy price
 
 import time
 # pip install python-binance
@@ -11,9 +11,6 @@ import pandas as pd
 # pip install numpy
 import numpy as np
 
-
-
-##################################################
 
 # Functions
 def computeRSI (data, time_window):
